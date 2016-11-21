@@ -1,0 +1,12 @@
+{
+    "DbHost": "localhost",
+    "DbName": "api",
+    "DbUser": "root",
+    "DbPassword": "",
+    "Charset": "utf8",
+    "ServerPort": "8080",
+    "Salt": "fdfsdfsdfsdf sdfsdf sdf sdfs",
+    "AuthTokenExpire": 3600,
+    "PrivateKeyPath": "/vagrant/api3/settings/keys/private_key",
+    "PublicKeyPath": "/vagrant/api3/settings/keys/public_key.pub"
+}
