@@ -3,10 +3,10 @@
     "DbName": "api",
     "DbUser": "root",
     "DbPassword": "",
-    "Charset": "utf8",
+    "DBCharset": "utf8",
     "ServerPort": "8080",
     "Salt": "fdfsdfsdfsdf sdfsdf sdf sdfs",
     "AuthTokenExpire": 3600,
-    "PrivateKeyPath": "/vagrant/api3/settings/keys/private_key",
-    "PublicKeyPath": "/vagrant/api3/settings/keys/public_key.pub"
+    "PrivateKeyPath": "/vagrant/api/settings/keys/private_key",
+    "PublicKeyPath": "/vagrant/api/settings/keys/public_key.pub"
 }

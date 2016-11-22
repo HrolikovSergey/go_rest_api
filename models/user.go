@@ -2,13 +2,15 @@ package models
 
 import(
     "github.com/jinzhu/gorm"
+    _ "github.com/jinzhu/gorm/dialects/mysql"
     "time"
 )
 
 type User struct {
     gorm.Model
-    Provider string
+    Provider string `gorm:"default:'email'"`
     Uid string
+    Password string `gorm:"-"`
     EncryptedPassword string
     ResetPasswordToken string
     ResetPasswordSentAt *time.Time
@@ -21,22 +23,18 @@ type User struct {
     ConfirmedAt *time.Time
     ConfirmationSentAt *time.Time
     UnconfirmedEmail string
-    Name string `grom:"size:50"`
-    Nickname string `grom:"size:50"`
-    Image string `grom:"size:255"`
-    Email string `grom:"size:255,index"`
+    Name string `gorm:"size:50"`
+    Nickname string `gorm:"size:50"`
+    Image string `gorm:"size:255"`
+    Email string `gorm:"size:255,index"`
     Tokens string
 }
 
-
-func (u User) Get() User{
-    return User{}
+func UserFindByCredentials(email string, password string) (user User){
+    DB.Where("encrypted_password = ? AND email = ?", password, email).First(&user)
+    return
 }
 
-func (u User) Save(){
-    //gorm.Open("mysql", )
+func (user User) Create(){
+    DB.Create(&user)
 }
-
-//func (u User) BeforeSave() bool{
-//    return false;
-//}

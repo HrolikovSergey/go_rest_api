@@ -22,10 +22,16 @@ type(
     }
 )
 
-var settings Settings = Settings{};
+var (
+    settings Settings = Settings{};
+    //DBConnectionString string
+)
 
+
+const mode = "debug" //debug | release | test
 
 func Init(){
+    os.Setenv("GIN_MODE", mode)
     file, err := os.Open("settings/settings.json")
     if (err != nil) {
         panic(err)
@@ -35,6 +41,7 @@ func Init(){
     if err != nil {
         panic(err)
     }
+    //DBConnectionString =
 }
 
 func Get() Settings {
