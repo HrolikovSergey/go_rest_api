@@ -32,7 +32,8 @@ type (
 
 var (
     Keys = AuthKeys{}
-    //UserClaims = Claims{}
+    LoggedUser = models.User{}
+    //UserClaims = *Claims{}
 )
 
 func init(){
@@ -41,7 +42,6 @@ func init(){
 }
 
 func respondWithError(code int, message string, c *gin.Context) {
-    fmt.Println("response with error")
     resp := map[string]string{"error": message}
     c.JSON(code, resp)
     c.Abort()
@@ -50,10 +50,15 @@ func respondWithError(code int, message string, c *gin.Context) {
 func IsAuthorized() gin.HandlerFunc{
     return func(c *gin.Context){
         token := c.Request.Header.Get("AuthToken")
-        if UserClaims, isValid := ValidateToken(token); !isValid {
+        UserClaims, isValid := ValidateToken(token);
+        if !isValid {
             respondWithError(401, "Unauthorized", c)
+        } else if !models.CheckToken(token) {
+            respondWithError(401, "Token expired", c)
         } else {
-            fmt.Println(UserClaims)
+            LoggedUser = models.UserByToken(token, UserClaims.ID)
+            //fmt.Println(LoggedUser)
+            //fmt.Println(UserClaims)
             c.Next()
         }
     }

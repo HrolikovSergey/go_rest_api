@@ -10,21 +10,21 @@ import (
 
 func Login(c *gin.Context){
     response := gin.H{}
-    formData := &forms.Login{}
-    err := models.Validate(c, formData)
-    if(err != nil){
-        c.JSON(400, response)
-        return
-    }
-    user := models.UserFindByCredentials(formData.Email, authentication.GetPassword(formData.Password))
-    fmt.Println(user)
-    if user != (models.User{}){
-        response["authToken"] = authentication.GenerateToken(user)
-        //models.UserTokenSave(user.ID, response["authToken"].(string))
+    form := &forms.Login{}
+    err := models.Validate(c, form)
+    if err == nil {
+        user := models.UserFindByCredentials(form.Email, authentication.GetPassword(form.Password))
+        if user.ID != 0{
+            response["authToken"] = authentication.GenerateToken(user)
+            models.UserTokenSave(user.ID, response["authToken"].(string))
+        } else {
+            response["error"] = "User not found"
+        }
+        c.JSON(200, response)
     } else {
-        response["error"] = "User not found"
+        response["error"] = "Validation fails"
+        c.JSON(400, response)
     }
-    c.JSON(200, response)
 }
 
 func Signup(c *gin.Context){
@@ -40,5 +40,6 @@ func Signup(c *gin.Context){
 }
 
 func Logout(c *gin.Context){
-    c.JSON(200, gin.H{"message": "logout"})
+    models.DeleteToken(c.Request.Header.Get("AuthToken"))
+    c.JSON(200, gin.H{"message": "ok"})
 }

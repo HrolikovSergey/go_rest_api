@@ -12,6 +12,12 @@ type ClientProduct struct{
     ProductID int
 }
 
+func init(){
+    if !DB.HasTable(&ClientProduct{}) {
+        DB.AutoMigrate(&ClientProduct{})
+    }
+}
+
 func (cp ClientProduct) TableName() string {
     return "client_products"
 }

@@ -22,10 +22,11 @@ func init() {
     if err != nil {
         panic(err)
     }
+
 }
 
-func Validate(c *gin.Context, formName interface{}) error{
-    if err := c.Bind(formName); err == nil {
+func Validate(c *gin.Context, form interface{}) error{
+    if err := c.Bind(form); err == nil {
         return nil
     }
     return err

@@ -13,11 +13,11 @@ func main(){
     authorizationRequired := api.Group("/")
     authorizationRequired.Use(authentication.IsAuthorized())
     {
-        authorizationRequired.GET("/authRequired", controllers.Login)
-        authorizationRequired.GET("/authRequired1", controllers.Login)
+        authorizationRequired.GET("/authRequired1", controllers.DoSomeThing)
+        authorizationRequired.GET("/logout", controllers.Logout)
     }
     api.POST("/login", controllers.Login)
-    api.GET("/signup", controllers.Signup)
+    api.POST("/signup", controllers.Signup)
 
     api.Run(":"+settings.Get().ServerPort)
 }

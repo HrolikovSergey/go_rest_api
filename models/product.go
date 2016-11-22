@@ -7,3 +7,9 @@ import(
 type Product struct{
     gorm.Model
 }
+
+func init(){
+    if !DB.HasTable(&Product{}) {
+        DB.AutoMigrate(&Product{})
+    }
+}

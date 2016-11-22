@@ -27,14 +27,31 @@ type User struct {
     Nickname string `gorm:"size:50"`
     Image string `gorm:"size:255"`
     Email string `gorm:"size:255,index"`
-    Tokens string
+    Tokens []UserToken `gorm:"ForeignKey:user_id;"`
+}
+
+func init(){
+    if !DB.HasTable(&User{}) {
+        DB.AutoMigrate(&User{})
+    }
 }
 
 func UserFindByCredentials(email string, password string) (user User){
-    DB.Where("encrypted_password = ? AND email = ?", password, email).First(&user)
+    DB.Where("users.encrypted_password = ? AND users.email = ?", password, email).First(&user)
     return
 }
 
 func (user User) Create(){
     DB.Create(&user)
+}
+
+func UserByToken(token string, userId uint) (user User){
+    user = User{}
+    user.ID = userId
+    //DB.LogMode(true)
+    DB.Model(&user).Related(&UserToken{}).First(&user)
+    //DB.LogMode(false)
+    //DB.Model(&user).Related(UserToken{}).Where("token = ? AND valid_till < ?", token, time.Now()).First(&user)
+    //DB.Where("users.id = ? AND tokens.token = ? AND valid_till < ?", userId, token, time.Now()).Related(UserToken{}).First(&user)
+    return
 }
